@@ -4,6 +4,8 @@
 import pandas as pd
 import os
 from ast import literal_eval
+import numpy as np
+import pickle
 
 # Supervised learning
 from tqdm import tqdm
@@ -20,6 +22,7 @@ data = pd.read_csv(data_dir + 'abcnews_labeled.csv',converters={'Comments':liter
 
 #Filtering out unlabeled data points
 data= data.loc[data.label.isin([0,1]), :]
+data = data.reset_index()
 # %%
 def text_representation(data):
   tfidf_vect = TfidfVectorizer()
@@ -45,7 +48,9 @@ print(classification_report(y_test, y_pred))
 
 # %%
 # Save model for subsequent runs
-
+model_dir = os.getcwd().replace('src/models','models/')
+filename = 'logistic_classifier.sav'
+pickle.dump(clf, open(model_dir +filename, 'wb'))
 
 
 # %%
@@ -56,3 +61,4 @@ vect = pd.DataFrame(tf.transform(new_data).toarray())
 new_data = pd.DataFrame(vect)
 logistic_prediction = clf.predict(new_data)
 print(logistic_prediction)
+# %%
