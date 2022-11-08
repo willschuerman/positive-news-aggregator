@@ -62,3 +62,17 @@ new_data = pd.DataFrame(vect)
 logistic_prediction = clf.predict(new_data)
 print(logistic_prediction)
 # %%
+data_dir = os.getcwd().replace('src/models','data/raw/')
+source_data = pd.read_csv(data_dir + 'demo-data.csv')
+
+
+# %%
+for id in np.arange(0,source_data.shape[0]):
+    new_data = [source_data['headline_text'][id]]
+    tf = TfidfVectorizer()
+    tfdf = tf.fit_transform(data['text'])
+    vect = pd.DataFrame(tf.transform(new_data).toarray())
+    new_data = pd.DataFrame(vect)
+    logistic_prediction = clf.predict(new_data)
+    print('{} - {}'.format(source_data['headline_text'][id],logistic_prediction))
+# %%
