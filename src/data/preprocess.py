@@ -104,6 +104,7 @@ df["label"] = label_model.predict(L=L_snorkel)
 # %%
 #make a copy of the dataframe
 data = df.copy()
+
 #define a function which handles the text preprocessing 
 def preparation_text_data(data):
     """
@@ -129,44 +130,9 @@ def preparation_text_data(data):
     # add prepared data to df
     data["text"] = corpus
     return data
+
 #apply the data preprocessing function
 data =  preparation_text_data(data)
+
 # save output
 data.to_csv('data/interim/abcnews_labeled.csv')
-
-# # %%
-# def text_representation(data):
-#   tfidf_vect = TfidfVectorizer()
-#   data['text'] = data['text'].apply(lambda text: " ".join(set(text)))
-#   X_tfidf = tfidf_vect.fit_transform(data['text'])
-#   print(X_tfidf.shape)
-#   print(tfidf_vect.get_feature_names())
-#   X_tfidf = pd.DataFrame(X_tfidf.toarray())
-#   return X_tfidf
-# #apply the TFIDV function
-# X_tfidf = text_representation(data)
-
-# # %%
-# X= X_tfidf
-# y = data['label']
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
-# #fit Log Regression Model
-# clf= LogisticRegression()
-# clf.fit(X_train,y_train)
-# clf.score(X_test,y_test)
-# y_pred = clf.predict(X_test)
-# print(classification_report(y_test, y_pred))
-
-# # %%
-# new_data = ["The US imposes sanctions on Rassia because of the Ukranian war"]
-# tf = TfidfVectorizer()
-# tfdf = tf.fit_transform(data['text'])
-# vect = pd.DataFrame(tf.transform(new_data).toarray())
-# new_data = pd.DataFrame(vect)
-# logistic_prediction = clf.predict(new_data)
-# print(logistic_prediction)
-
-# # %%
-# new_data.to_csv('data/interim/abcnews_labelled')
-
-
