@@ -65,3 +65,4 @@ new_headline = ["The US imposes sanctions on Rassia because of the Ukranian war"
 sequences = tokenizer.texts_to_sequences(new_headline)
 padded_seqs = pad_sequences(sequences, maxlen=120, padding='post', truncating='post')
 print(model.predict(padded_seqs))
+# %%
