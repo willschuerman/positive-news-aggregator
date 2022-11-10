@@ -9,13 +9,16 @@ Based on https://towardsdatascience.com/sentiment-analysis-on-news-headlines-cla
 
 ## Development:
 
-Run this in your terminal:
+Run this in your terminal to set up:
 
     conda create -n positive
     conda activate positive
     pip install -r requirements.txt -U --user
 
+Then run:
 
-To save new requirements
+    python src/models/tf_classifier.py
+
+If you add new requirements, save them with:
 
     pip list --format=freeze > requirements.txt
