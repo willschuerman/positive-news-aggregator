@@ -10,9 +10,10 @@ Based on https://towardsdatascience.com/sentiment-analysis-on-news-headlines-cla
 ## Development:
 
 
-    conda create -n positive --file requirements.txt
+    conda create -n positive
     conda activate positive
+    pip install -r requirements.txt
 
 To save new requirements
 
-    conda list -e > requirements.txt
+    pip list --format=freeze > requirements.txt
