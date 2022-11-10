@@ -37,7 +37,7 @@ pandas==1.5.1
 parso==0.8.3
 pexpect==4.8.0
 pickleshare==0.7.5
-pip==22.2.2
+pip==22.3.1
 platformdirs==2.5.3
 pmbootstrap==1.45.0
 prompt-toolkit==3.0.32
