@@ -18,7 +18,8 @@ Run this in your terminal to set up:
 
 Train the model with:
 
-    python src/models/tf_classifier.py
+    cd src/models
+    python ./tf_classifier.py
 
 or run open the file in VSCode or Jupyter
 
