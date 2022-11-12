@@ -73,5 +73,8 @@ new_headline = [
 sequences = tokenizer.texts_to_sequences(new_headline)
 padded_seqs = pad_sequences(sequences, maxlen=120,
                             padding='post', truncating='post')
-print(model.predict(padded_seqs))
+prediction = model.predict(padded_seqs)
+
+for i in range(len(prediction)):
+    print(prediction[i][0]*100, '% positive: ', new_headline[i], '\n')
 # %%
