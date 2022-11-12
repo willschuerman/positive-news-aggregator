@@ -6,7 +6,6 @@ Adapted from [this guide](https://towardsdatascience.com/sentiment-analysis-on-n
 
 This is hosted on Github [here](https://github.com/willschuerman/positive-news-aggregator)
 
-
 ## Development:
 
 Run this in your terminal to set up:
@@ -15,14 +14,15 @@ Run this in your terminal to set up:
     conda activate positive
     pip install -r requirements.txt -U --user
 
-----
+---
+
 Train the model with:
 
     python src/models/tf_classifier.py
 
 or run open the file in VSCode or Jupyter
 
-----
+---
 
 If you add new requirements, save them with:
 
