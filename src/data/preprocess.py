@@ -2,6 +2,7 @@
 #import libraries and modules
 import io
 import pandas as pd
+import os
 
 #Snorkel
 from snorkel.labeling import LabelingFunction
@@ -38,7 +39,7 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # %%
-
+os.chdir('../..')
 # store the dataset as a Pandas Dataframe
 df = pd.read_csv('data/raw/abcnews-date-text.csv')
 #conduct some data cleaning
@@ -67,7 +68,7 @@ def make_keyword_lf(keywords, label=POSITIVE):
 #resource: https://www.snorkel.org/use-cases/01-spam-tutorial#3-writing-more-labeling-functions
 #these two lists can be further extended 
 """positive news might contain the following words' """
-keyword_positive = make_keyword_lf(keywords=['boosts', 'great', 'develops', 'promising', 'ambitious', 'delighted', 'record', 'win', 'breakthrough', 'recover', 'achievement', 'peace', 'party', 'hope', 'flourish', 'respect', 'partnership', 'champion', 'positive', 'happy', 'bright', 'confident', 'encouraged', 'perfect', 'complete', 'assured' ])
+keyword_positive = make_keyword_lf(keywords=['boosts', 'great', 'develops', 'promising', 'ambitious', 'delighted', 'record', 'win', 'breakthrough', 'recover', 'achievement', 'peace', 'party', 'hope', 'flourish', 'respect', 'partnership', 'champion', 'positive', 'happy', 'bright', 'confident', 'encouraged', 'perfect', 'complete', 'assured' ], label=POSITIVE)
 """negative news might contain the following words"""
 keyword_negative = make_keyword_lf(keywords=['war','solidiers', 'turmoil', 'injur','trouble', 'aggressive', 'killed', 'coup', 'evasion', 'strike', 'troops', 'dismisses', 'attacks', 'defeat', 'damage', 'dishonest', 'dead', 'fear', 'foul', 'fails', 'hostile', 'cuts', 'accusations', 'victims',  'death', 'unrest', 'fraud', 'dispute', 'destruction', 'battle', 'unhappy', 'bad', 'alarming', 'angry', 'anxious', 'dirty', 'pain', 'poison', 'unfair', 'unhealthy'
                                               ], label=NEGATIVE)
@@ -137,3 +138,4 @@ data =  preparation_text_data(data)
 
 # save output
 data.to_csv('data/interim/abcnews_labeled.csv')
+# %%
