@@ -39,10 +39,11 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # %%
+os.chdir('../..')
 # store the dataset as a Pandas Dataframe
-df = pd.read_csv('../data/raw/abcnews-date-text.csv')
+df = pd.read_csv('data/raw/abcnews-date-text.csv')
 #conduct some data cleaning
-# df = df.drop(['publish_date', 'Unnamed: 2'], axis=1)
+df = df.drop(['publish_date'], axis=1)
 df = df.rename(columns = {'headline_text': 'text'})
 df['text'] = df['text'].astype(str)
 #check the data info
@@ -67,7 +68,7 @@ def make_keyword_lf(keywords, label=POSITIVE):
 #resource: https://www.snorkel.org/use-cases/01-spam-tutorial#3-writing-more-labeling-functions
 #these two lists can be further extended 
 """positive news might contain the following words' """
-keyword_positive = make_keyword_lf(keywords=['boosts', 'great', 'develops', 'promising', 'ambitious', 'delighted', 'record', 'win', 'breakthrough', 'recover', 'achievement', 'peace', 'party', 'hope', 'flourish', 'respect', 'partnership', 'champion', 'positive', 'happy', 'bright', 'confident', 'encouraged', 'perfect', 'complete', 'assured' ], label=POSITIVE)
+keyword_positive = make_keyword_lf(keywords=['boosts', 'great', 'develops', 'promising', 'ambitious', 'delighted', 'record', 'win', 'breakthrough', 'recover', 'achievement', 'peace', 'party', 'hope', 'flourish', 'respect', 'partnership', 'champion', 'positive', 'happy', 'bright', 'confident', 'encouraged', 'perfect', 'complete', 'assured' ])
 """negative news might contain the following words"""
 keyword_negative = make_keyword_lf(keywords=['war','solidiers', 'turmoil', 'injur','trouble', 'aggressive', 'killed', 'coup', 'evasion', 'strike', 'troops', 'dismisses', 'attacks', 'defeat', 'damage', 'dishonest', 'dead', 'fear', 'foul', 'fails', 'hostile', 'cuts', 'accusations', 'victims',  'death', 'unrest', 'fraud', 'dispute', 'destruction', 'battle', 'unhappy', 'bad', 'alarming', 'angry', 'anxious', 'dirty', 'pain', 'poison', 'unfair', 'unhealthy'
                                               ], label=NEGATIVE)
@@ -80,10 +81,12 @@ def textblob_sentiment(x):
     x.polarity = scores.sentiment.polarity
     x.subjectivity = scores.sentiment.subjectivity
     return x
+    
 #find polarity
 @labeling_function(pre=[textblob_sentiment])
 def textblob_polarity(x):
     return POSITIVE if x.polarity > 0.6 else ABSTAIN
+
 #find subjectivity 
 @labeling_function(pre=[textblob_sentiment])
 def textblob_subjectivity(x):
@@ -101,6 +104,12 @@ label_model = LabelModel(cardinality=2, verbose=True)
 label_model.fit(L_snorkel)
 #predict and create the labels
 df["label"] = label_model.predict(L=L_snorkel)
+
+# %%
+#Filtering out unlabeled data points
+df= df.loc[df.label.isin([0,1]), :]
+#find the label counts 
+df['label'].value_counts()
 
 # %%
 #make a copy of the dataframe
