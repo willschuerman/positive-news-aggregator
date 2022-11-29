@@ -39,9 +39,8 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # %%
-os.chdir('../..')
 # store the dataset as a Pandas Dataframe
-df = pd.read_csv('data/raw/abcnews-date-text.csv')
+df = pd.read_csv('../data/raw/abcnews-date-text.csv')
 #conduct some data cleaning
 # df = df.drop(['publish_date', 'Unnamed: 2'], axis=1)
 df = df.rename(columns = {'headline_text': 'text'})
