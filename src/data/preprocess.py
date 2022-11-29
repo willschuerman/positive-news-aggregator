@@ -115,35 +115,6 @@ df['label'].value_counts()
 #make a copy of the dataframe
 data = df.copy()
 
-#define a function which handles the text preprocessing 
-def preparation_text_data(data):
-    """
-    This pipeline prepares the text data, conducting the following steps:
-    1) Tokenization
-    2) Lemmatization
-    4) Removal of stopwords
-    5) Removal of punctuation
-    """
-    # initialize spacy object
-    nlp = spacy.load('en_core_web_sm')
-    # select raw text
-    raw_text = data.text.values.tolist()
-    # tokenize
-    tokenized_text = [[nlp(i.lower().strip())] for i in tqdm(raw_text)]
-    #define the punctuations and stop words
-    punc = string.punctuation 
-    stop_words = set(stopwords.words('english'))
-    #lemmatize, remove stopwords and punctuationd
-    corpus = []
-    for doc in tqdm(tokenized_text):
-        corpus.append([word.lemma_ for word in doc[0] if (word.lemma_ not in stop_words and word.lemma_ not in punc)])
-    # add prepared data to df
-    data["text"] = corpus
-    return data
-
-#apply the data preprocessing function
-data =  preparation_text_data(data)
-
 # save output
 data.to_csv('data/interim/abcnews_labeled.csv')
 # %%
