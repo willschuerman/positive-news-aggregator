@@ -67,7 +67,8 @@ history = model.fit(training_padded,
 new_headline = [
     "Analysis: This Democratic leader just broke the first rule of politics",
     "Kevin McCarthy previews Republicans' plans for the majority -- starting at the border",
-    "Fetterman sues to have mail-in ballots counted even if not signed with valid date"
+    "Fetterman sues to have mail-in ballots counted even if not signed with valid date",
+    "The US imposes sanctions on Rassia because of the Ukranian war"
 ]
 # prepare the sequences of the sentences in question
 sequences = tokenizer.texts_to_sequences(new_headline)
@@ -77,6 +78,6 @@ prediction = model.predict(padded_seqs)
 
 for i in range(len(prediction)):
     print(
-        '{}% positive - {}\n'.format(round(prediction[i][0]*100), new_headline[i]))
+        '{}% positive - {}\n'.format(prediction[i][0], new_headline[i]))
 
 # %%
