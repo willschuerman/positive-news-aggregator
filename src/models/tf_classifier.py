@@ -12,8 +12,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # %%
 # Import data
-data_dir = os.getcwd().replace('src/models', 'data/interim/')
-data = pd.read_csv(data_dir + 'abcnews_labeled.csv',
+data = pd.read_csv('../../data/interim/abcnews_labeled.csv',
                    converters={'Comments': literal_eval})
 
 # Filtering out unlabeled data points
