@@ -115,5 +115,5 @@ df['label'].value_counts()
 data = df.copy()
 
 # save output
-data.to_csv('data/interim/abcnews_labeled.csv')
+data.to_csv('../../data/interim/abcnews_labeled.csv')
 # %%
