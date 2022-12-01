@@ -43,7 +43,7 @@ os.chdir('../..')
 # store the dataset as a Pandas Dataframe
 df = pd.read_csv('data/raw/abcnews-date-text.csv')
 #conduct some data cleaning
-# df = df.drop(['publish_date', 'Unnamed: 2'], axis=1)
+df = df.drop(['publish_date'], axis=1)
 df = df.rename(columns = {'headline_text': 'text'})
 df['text'] = df['text'].astype(str)
 #check the data info
@@ -68,7 +68,7 @@ def make_keyword_lf(keywords, label=POSITIVE):
 #resource: https://www.snorkel.org/use-cases/01-spam-tutorial#3-writing-more-labeling-functions
 #these two lists can be further extended 
 """positive news might contain the following words' """
-keyword_positive = make_keyword_lf(keywords=['boosts', 'great', 'develops', 'promising', 'ambitious', 'delighted', 'record', 'win', 'breakthrough', 'recover', 'achievement', 'peace', 'party', 'hope', 'flourish', 'respect', 'partnership', 'champion', 'positive', 'happy', 'bright', 'confident', 'encouraged', 'perfect', 'complete', 'assured' ], label=POSITIVE)
+keyword_positive = make_keyword_lf(keywords=['boosts', 'great', 'develops', 'promising', 'ambitious', 'delighted', 'record', 'win', 'breakthrough', 'recover', 'achievement', 'peace', 'party', 'hope', 'flourish', 'respect', 'partnership', 'champion', 'positive', 'happy', 'bright', 'confident', 'encouraged', 'perfect', 'complete', 'assured' ])
 """negative news might contain the following words"""
 keyword_negative = make_keyword_lf(keywords=['war','solidiers', 'turmoil', 'injur','trouble', 'aggressive', 'killed', 'coup', 'evasion', 'strike', 'troops', 'dismisses', 'attacks', 'defeat', 'damage', 'dishonest', 'dead', 'fear', 'foul', 'fails', 'hostile', 'cuts', 'accusations', 'victims',  'death', 'unrest', 'fraud', 'dispute', 'destruction', 'battle', 'unhappy', 'bad', 'alarming', 'angry', 'anxious', 'dirty', 'pain', 'poison', 'unfair', 'unhealthy'
                                               ], label=NEGATIVE)
@@ -81,10 +81,12 @@ def textblob_sentiment(x):
     x.polarity = scores.sentiment.polarity
     x.subjectivity = scores.sentiment.subjectivity
     return x
+    
 #find polarity
 @labeling_function(pre=[textblob_sentiment])
 def textblob_polarity(x):
     return POSITIVE if x.polarity > 0.6 else ABSTAIN
+
 #find subjectivity 
 @labeling_function(pre=[textblob_sentiment])
 def textblob_subjectivity(x):
@@ -104,37 +106,14 @@ label_model.fit(L_snorkel)
 df["label"] = label_model.predict(L=L_snorkel)
 
 # %%
+#Filtering out unlabeled data points
+df= df.loc[df.label.isin([0,1]), :]
+#find the label counts 
+df['label'].value_counts()
+
+# %%
 #make a copy of the dataframe
 data = df.copy()
-
-#define a function which handles the text preprocessing 
-def preparation_text_data(data):
-    """
-    This pipeline prepares the text data, conducting the following steps:
-    1) Tokenization
-    2) Lemmatization
-    4) Removal of stopwords
-    5) Removal of punctuation
-    """
-    # initialize spacy object
-    nlp = spacy.load('en_core_web_sm')
-    # select raw text
-    raw_text = data.text.values.tolist()
-    # tokenize
-    tokenized_text = [[nlp(i.lower().strip())] for i in tqdm(raw_text)]
-    #define the punctuations and stop words
-    punc = string.punctuation 
-    stop_words = set(stopwords.words('english'))
-    #lemmatize, remove stopwords and punctuationd
-    corpus = []
-    for doc in tqdm(tokenized_text):
-        corpus.append([word.lemma_ for word in doc[0] if (word.lemma_ not in stop_words and word.lemma_ not in punc)])
-    # add prepared data to df
-    data["text"] = corpus
-    return data
-
-#apply the data preprocessing function
-data =  preparation_text_data(data)
 
 # save output
 data.to_csv('data/interim/abcnews_labeled.csv')
