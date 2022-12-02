@@ -20,6 +20,7 @@ Train the model with:
 
     cd src/models
     python ./tf_classifier.py
+    scrapy runspider ../scrape.py
 
 or run open the file in VSCode or Jupyter
 
